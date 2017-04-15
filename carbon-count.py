@@ -26,7 +26,7 @@ Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
 
 # Initialize sensors
-sensor = NDIR.Sensor(Config.getint('Co2Sensor','Address'))
+sensor = NDIR.Sensor(int(Config.get('Co2Sensor','Address'),16))
 sensor.begin()
 tmpSensor = Adafruit_DHT.DHT11
 tmpSensorPin = Config.getint('TempSensor','Gpio')
