@@ -4,7 +4,6 @@ This project uses a [10,000ppm MH-Z16 NDIR CO2 Sensor](http://sandboxelectronics
 to measure the CO2 concentration within the room air and a DHT11 for the temperature and humidity measurement.
 The data collected is sent to a InfluxDB from which it can by visualized via a graphical UI like [Grafana](https://grafana.com/).
 
-The setup looks like this: 
 <img src="https://gehridav.github.io/img/co2-temp-pi-project.jpg" width="500"/>
    
 ## Needed software:
@@ -68,3 +67,4 @@ sudo pip install --upgrade influxdb
 ## Connecting DHT11 to Pi
 In my case, I use a DHT11 sensor coming together with a pull-up resistor on a small board. It has three connectors, from left to right:
  DHT11 signal (GPIO), +3.3V input, GND.
+ 
