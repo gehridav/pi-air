@@ -11,15 +11,11 @@ import Adafruit_DHT
 
 class Measurement:
 
-    def __init__(self, session, runNo, time, ppm, temperature, humidity):
+    def __init__(self, session, runNo, time, ppm, temp, hum):
         self.measurement = session
         self.tags  = {'run': runNo}
         self.time = time
-        self.fields = {'ppm': ppm, 'temperature': temperature, 'humidity': humidity}
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        self.fields = {'ppm': ppm, 'temp': temp, 'hum': hum}
 
 # Load configuration
 Config = ConfigParser.ConfigParser()
@@ -32,7 +28,7 @@ tmpSensor = Adafruit_DHT.DHT11
 tmpSensorPin = Config.getint('TempSensor','Gpio')
 
 # Initialize InfluxDb client
-#client = InfluxDBClient(Config.get('InfluxDb','Host'), Config.get('InfluxDb','Port'), Config.get('InfluxDb','User'), Config.get('InfluxDb','Password'), Config.get('InfluxDb','Dbname'), True, True)
+client = InfluxDBClient(Config.get('InfluxDb','Host'), Config.get('InfluxDb','Port'), Config.get('InfluxDb','User'), Config.get('InfluxDb','Password'), Config.get('InfluxDb','Dbname'), True, True)
 
 #Initialize current session
 session = Config.get('InfluxDb','Session')
@@ -43,19 +39,20 @@ runNo = Config.get('InfluxDb','RunPrefix') + now.strftime("%Y%m%d%H%M")
 try:
     while True:
         sensor.measure()
-        humidity, temperature = Adafruit_DHT.read_retry(tmpSensor, tmpSensorPin)
+        hum, temp = Adafruit_DHT.read_retry(tmpSensor, tmpSensorPin)
 
         utc_datetime = datetime.datetime.utcnow()
         iso = utc_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
         try:
-            #client.write_points(Measurement(session, runNo, iso, sensor.ppm, temperature, humidity).toJSON())
+            measurement = Measurement(session, runNo, iso, sensor.ppm, temp, hum) 
+            client.write_points([vars(measurement)])
             print("Round:")
-            print(Measurement(session, runNo, iso, sensor.ppm, temperature, humidity).toJSON())
+            print(vars(measurement))
         except Exception as ex:
             print ex
 
-        time.sleep(20)
+        time.sleep(Config.getint('Global','MeasureInterval'))
 except KeyboardInterrupt:
     pass
 
