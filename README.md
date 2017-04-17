@@ -1,8 +1,11 @@
 # RaspberryPI based room air quality data collector
 
-This projects uses a [10,000ppm MH-Z16 NDIR CO2 Sensor](http://sandboxelectronics.com/?product=mh-z16-ndir-co2-sensor-with-i2cuart-5v3-3v-interface-for-arduinoraspeberry-pi) 
+This project uses a [10,000ppm MH-Z16 NDIR CO2 Sensor](http://sandboxelectronics.com/?product=mh-z16-ndir-co2-sensor-with-i2cuart-5v3-3v-interface-for-arduinoraspeberry-pi) 
 to measure the CO2 concentration within the room air and a DHT11 for the temperature and humidity measurement.
 The data collected is sent to a InfluxDB from which it can by visualized via a graphical UI like [Grafana](https://grafana.com/).
+
+The setup looks like this: 
+<img src="https://gehridav.github.io/img/co2-temp-pi-project.jpg" width="500"/>
    
 ## Needed software:
 ### DHT11
@@ -60,12 +63,7 @@ To send the collected data into a InfluxDB database, the python client must be i
 ```
 sudo pip install --upgrade pip
 sudo pip install --upgrade influxdb
-```
-To push the data to a host on the internet via a secure connection, additional packages must be installed
-```
-
-```
- 
+``` 
  
 ## Connecting DHT11 to Pi
 In my case, I use a DHT11 sensor coming together with a pull-up resistor on a small board. It has three connectors, from left to right:
