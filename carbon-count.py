@@ -6,6 +6,7 @@ import ConfigParser
 from influxdb import InfluxDBClient
 import Adafruit_DHT
 
+
 class Measurement:
 
     def __init__(self, session, runNo, time, ppm, temp, hum):
@@ -13,6 +14,16 @@ class Measurement:
         self.tags  = {'run': runNo}
         self.time = time
         self.fields = {'ppm': ppm, 'temp': temp, 'hum': hum}
+
+
+def validate(refValue, newValue):
+        if refValue != 0:
+            if newValue < refValue * 2:
+                return newValue
+            else:
+                return refValue
+        else:
+            return newValue
 
 # Load configuration
 Config = ConfigParser.ConfigParser()
@@ -32,17 +43,21 @@ session = Config.get('InfluxDb','Session')
 now = datetime.datetime.now()
 runNo = Config.get('InfluxDb','RunPrefix') + now.strftime("%Y%m%d%H%M")
 
+humRef = 0;
+tempRef = 0;
 
 try:
     while True:
         sensor.measure()
         hum, temp = Adafruit_DHT.read_retry(tmpSensor, tmpSensorPin)
+        humRef = validate(humRef,hum)
+        tempRef = validate(tempRef, temp)
 
         utc_datetime = datetime.datetime.utcnow()
         iso = utc_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
         try:
-            measurement = Measurement(session, runNo, iso, sensor.ppm, temp, hum) 
+            measurement = Measurement(session, runNo, iso, sensor.ppm, tempRef, humRef)
             client.write_points([vars(measurement)])
         except Exception as ex:
             print ex
@@ -50,4 +65,5 @@ try:
         time.sleep(Config.getint('Global','MeasureInterval'))
 except KeyboardInterrupt:
     pass
+
 
