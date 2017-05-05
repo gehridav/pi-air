@@ -32,7 +32,7 @@ Config.read("config.ini")
 # Initialize sensors
 sensor = NDIR.Sensor(int(Config.get('Co2Sensor','Address'),16))
 sensor.begin()
-tmpSensor = Adafruit_DHT.DHT11
+tmpSensor = Adafruit_DHT.DHT22
 tmpSensorPin = Config.getint('TempSensor','Gpio')
 
 # Initialize InfluxDb client
