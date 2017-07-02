@@ -1,14 +1,14 @@
 # RaspberryPI based room air quality data collector
 
 This project uses a [10,000ppm MH-Z16 NDIR CO2 Sensor](http://sandboxelectronics.com/?product=mh-z16-ndir-co2-sensor-with-i2cuart-5v3-3v-interface-for-arduinoraspeberry-pi) 
-to measure the CO2 concentration within the room air and a DHT11 for the temperature and humidity measurement.
+to measure the CO2 concentration within the room air and a DHT11/DHT22 for the temperature and humidity measurement.
 The data collected is sent to a InfluxDB from which it can by visualized via a graphical UI like [Grafana](https://grafana.com/).
 
 <img src="https://gehridav.github.io/img/co2-temp-pi-project.jpg" width="500"/>
    
 ## Needed software:
-### DHT11
-A library to access the DHT11 sensor can be found on [GitHub](https://github.com/adafruit/Adafruit_Python_DHT). Clone the 
+### DHT22
+A library to access the DHT22 sensor can be found on [GitHub](https://github.com/adafruit/Adafruit_Python_DHT). Clone the 
 repo to your system and build it. Before you run this, make sure your system is able to compile Python extensions. This can be done via:
 ```
 sudo apt-get update
@@ -20,7 +20,7 @@ When this is fine, the library can be downloaded and built like that:
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git && cd Adafruit_Python_DHT
 sudo python setup.py install
 ```
-If you have the DHT11 sensor connected to GPIO 24, you can test the sensor by calling an example script that comes with the library:
+If you have the DHT22 sensor connected to GPIO 24, you can test the sensor by calling an example script that comes with the library:
 ```
 sudo ./examples/AdafruitDHT.py 11 24
 ```
@@ -67,4 +67,7 @@ sudo pip install --upgrade influxdb
 ## Connecting DHT11 to Pi
 In my case, I use a DHT11 sensor coming together with a pull-up resistor on a small board. It has three connectors, from left to right:
  DHT11 signal (GPIO), +3.3V input, GND.
+
+## Connecting DHT22 to Pi
+As it turned out that the DHT11 sensor is quite inaccurate, I replaced it with a [DHT22 board](https://www.aliexpress.com/item/DHT22-AM2302-Digital-Temperature-And-Humidity-Sensor-Module-Replace-SHT11-SHT15/2038550076.html) that has a pull-up resistor includede. There the connectors are like this (left to right): +3.3V input, DHT22 signal (GPIO), GND.
  
