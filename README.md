@@ -22,7 +22,7 @@ sudo python setup.py install
 ```
 If you have the DHT22 sensor connected to GPIO 24, you can test the sensor by calling an example script that comes with the library:
 ```
-sudo ./examples/AdafruitDHT.py 11 24
+sudo ./examples/AdafruitDHT.py 22 24
 ```
 
 ### MH-Z16
