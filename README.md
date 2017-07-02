@@ -26,6 +26,9 @@ sudo ./examples/AdafruitDHT.py 11 24
 ```
 
 ### MH-Z16
+
+#### I2C
+
 The code used here is based on the source code from [Sandbox electronics](https://github.com/SandboxElectronics/NDIR). 
 A [technical documentation](http://sandboxelectronics.com/?p=1126) about the sensor can be found also on their website.
 As the sensor communicates with the PI via I2C, make sure that it's enabled on your PI. 
@@ -57,6 +60,11 @@ lsmod | grep i2c_
 ```
 what should return the two loaded modules.
 
+#### UART
+
+If you directly connect the sensor to the UART port of the PI, you must make sure the serial interface is enabled the console output that by default is sent to it is disabled.
+This can be done via the raspi-config tool, 5 Interfaceing-Options -> P6 Serial.  
+
 ### Influx DB client
 To send the collected data into a InfluxDB database, the python client must be installed.
 ```
@@ -69,5 +77,5 @@ In my case, I use a DHT11 sensor coming together with a pull-up resistor on a sm
  DHT11 signal (GPIO), +3.3V input, GND.
 
 ## Connecting DHT22 to Pi
-As it turned out that the DHT11 sensor is quite inaccurate, I replaced it with a [DHT22 board](https://www.aliexpress.com/item/DHT22-AM2302-Digital-Temperature-And-Humidity-Sensor-Module-Replace-SHT11-SHT15/2038550076.html) that has a pull-up resistor includede. There the connectors are like this (left to right): +3.3V input, DHT22 signal (GPIO), GND.
+As it turned out that the DHT11 sensor is quite inaccurate, I replaced it with a [DHT22 board](https://www.aliexpress.com/item/DHT22-AM2302-Digital-Temperature-And-Humidity-Sensor-Module-Replace-SHT11-SHT15/2038550076.html) that has a pull-up resistor included. There the connectors are like this (left to right): +3.3V input, DHT22 signal (GPIO), GND.
  

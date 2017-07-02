@@ -3,12 +3,6 @@
 # Calibration and read of the CO2 sensor MH-Z16
 # according to the datasheet : http://www.seeedstudio.com/wiki/images/c/ca/MH-Z16_CO2_datasheet_EN.pdf
 # output value directly in ppm
-# Doms made
-# History
-# ------------------------------------------------
-# Author     Date      		Comments
-# Doms      13 04 15 		Initial Authoring
-#
 '''
 ## License
 
@@ -38,23 +32,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ########################################################################
 import os
 import serial, time
-import smbus
 import math
-import RPi.GPIO as GPIO
-import struct
 import sys
-import datetime
-import grovepi
 import struct
-from grovepi import *
-
 
 #co2 sensor
 #use an external usb to serial adapter
-ser = serial.Serial('/dev/ttyUSB0',  9600, timeout = 1)	#Open the serial port at 9600 baud
+#ser = serial.Serial('/dev/ttyUSB0',  9600, timeout = 1)	#Open the serial port at 9600 baud
 
 #To open the raspberry serial port
-#ser = serial.Serial('/dev/ttyAMA0',  9600, timeout = 1)	#Open the serial port at 9600 baud
+ser = serial.Serial('/dev/serial0',  9600, timeout = 1)	#Open the serial port at 9600 baud
 
 #init serial
 ser.flush()
@@ -75,14 +62,14 @@ class CO2:
                 CO2.inp = ser.read(9)
                 high_level = struct.unpack('B',CO2.inp[2])[0]
                 low_level = struct.unpack('B',CO2.inp[3])[0]
-                temp_co2  =  struct.unpack('B',CO2.inp[4])[0] - 40
+                #temp_co2  =  struct.unpack('B',CO2.inp[4])[0] - 40
 
                 #output in ppm
                 conc = high_level*256+low_level
-                return [conc,temp_co2]
+                return conc
 
         except IOError:
-                return [-1,-1]
+                return -1
 
     def calibrateZero(self):
         try:
@@ -107,13 +94,14 @@ class CO2:
 ########################################################################################################
 # following the specs of the sensor :
 # read the sensor, wait 3 minutes, set the zero, read the sensor
+'''
 c = CO2()
 
 while True:
     try:
         #CO2 sensor calib
         print("wait 3 minutes to warm up CO2 sensor")
-        time.sleep(180)
+        #time.sleep(180)
         print("Read before calibration-->",c.read())
 
         print("calibrating...")
@@ -130,3 +118,4 @@ while True:
     except KeyboardInterrupt:
         print("Exiting")
         sys.exit(0)
+'''
