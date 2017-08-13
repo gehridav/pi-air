@@ -62,7 +62,7 @@ what should return the two loaded modules.
 
 #### UART
 
-If you directly connect the sensor to the UART port of the PI, you must make sure the serial interface is enabled the console output that by default is sent to it is disabled.
+If you directly connect the sensor to the UART port of the PI, you must make sure the serial interface is enabled and the console output that by default is sent to it is disabled.
 This can be done via the raspi-config tool, 5 Interfaceing-Options -> P6 Serial.  
 
 ### Influx DB client
