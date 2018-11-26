@@ -9,9 +9,9 @@ import Adafruit_DHT
 
 class Measurement:
 
-    def __init__(self, session, runNo, time, ppm, temp, hum):
+    def __init__(self, session, runNo, location, device, time, ppm, temp, hum):
         self.measurement = session
-        self.tags  = {'run': runNo}
+        self.tags  = {'run': runNo, 'device': device, 'location':location}
         self.time = time
         self.fields = {'ppm': ppm, 'temp': temp, 'hum': hum}
 
@@ -42,6 +42,8 @@ client = InfluxDBClient(Config.get('InfluxDb','Host'), Config.get('InfluxDb','Po
 session = Config.get('InfluxDb','Session')
 now = datetime.datetime.now()
 runNo = Config.get('InfluxDb','RunPrefix') + now.strftime("%Y%m%d%H%M")
+location = Config.get('InfluxDb','Location')
+device = Config.get('InfluxDb','Device')
 
 humRef = 0;
 tempRef = 0;
@@ -57,7 +59,7 @@ try:
         iso = utc_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
         try:
-            measurement = Measurement(session, runNo, iso, sensor.ppm, tempRef, humRef)
+            measurement = Measurement(session, runNo, location, device, iso, sensor.ppm, tempRef, humRef)
             client.write_points([vars(measurement)])
         except Exception as ex:
             print ex
@@ -65,5 +67,3 @@ try:
         time.sleep(Config.getint('Global','MeasureInterval'))
 except KeyboardInterrupt:
     pass
-
-
